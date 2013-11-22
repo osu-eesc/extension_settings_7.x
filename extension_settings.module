@@ -1,0 +1,344 @@
+<?php
+/**
+ * @file extension_settings.module
+ *
+ * A module to for configuring site-specific options
+ *
+ */
+
+/**
+ * @file
+ * Code for the Extension Top Hat feature.
+ */
+
+include_once 'extension_settings.features.inc';
+
+/**
+ * Implements hook_permssion()
+ *
+ * Permissions to configure all settings
+ */
+function extension_settings_permission(){
+  return array('configure extension settings' => array(
+      'title'           => t('Configure Extension Settings'),
+      'description'     => t('Configure Extension Settings'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_menu()
+ *
+ */
+function extension_settings_menu() {
+  $items = array();
+
+  // Add our settings form to the Configuration -> Search and Metadata menu
+  // The form is loaded from an include file
+  $items['admin/config/extension-settings'] = array(
+    'title'            => 'Extension Settings',
+    'description'      => 'Configure site-specific settings',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('extension_settings_settings'),
+    'access arguments' => array('configure extension settings'),
+    'type'             => MENU_NORMAL_ITEM,
+		'file'						 => 'extension_settings.admin.inc',
+  );
+	$items['admin/config/extension-settings/settings'] = array(
+    'title'            => 'Extension Settings',
+    'type'             => MENU_DEFAULT_LOCAL_TASK,
+		'weight'					 => 0,
+  );
+	$items['admin/config/extension-settings/top-hat'] = array(
+    'title'            => 'Top Hat',
+    'description'      => 'Configure site-specific settings',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('extension_settings_top_hat_settings'),
+    'access arguments' => array('configure extension settings'),
+    'type'             => MENU_LOCAL_TASK,
+		'file'						 => 'extension_settings.admin.inc',
+		'weight'					 => 1,
+  );
+	$items['admin/config/extension-settings/footer'] = array(
+    'title'            => 'Footer',
+    'description'      => 'Configure site-specific settings',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('extension_settings_footer_settings'),
+    'access arguments' => array('configure extension settings'),
+    'type'             => MENU_LOCAL_TASK,
+		'file'						 => 'extension_settings.admin.inc',
+		'weight'					 => 2,
+  );
+
+  return $items;
+}
+
+
+
+
+/**
+ * Implements hook_init()
+ *
+ * Build the utiltiy menu if it doesn't exist
+ *
+ */
+function extension_settings_init() {
+  $menu = array(
+      'menu_name'   => 'osu-top-hat',
+      'title'       => t('OSU Top Hat'),
+      'description' => t('The menu at the top of the page'),
+      );
+  menu_save($menu);
+
+  $links = menu_load_links('osu-top-hat');
+
+  if (empty($links)) {
+
+    $item = array(
+        'link_title'  => t('Calendar'),
+        'link_path'   => 'http://calendar.oregonstate.edu',
+        'menu_name'   => 'osu-top-hat',
+        'weight'      => 1,
+        );
+    menu_link_save($item);
+
+    $item = array(
+        'link_title'  => t('Library'),
+        'link_path'   => 'http://osulibrary.oregonstate.edu',
+        'menu_name'   => 'osu-top-hat',
+        'weight'      => 2,
+        );
+    menu_link_save($item);
+
+    $item = array(
+        'link_title'  => t('Maps'),
+        'link_path'   => 'http://oregonstate.edu/campusmap',
+        'menu_name'   => 'osu-top-hat',
+        'weight'      => 3,
+        );
+    menu_link_save($item);
+
+    $item = array(
+        'link_title'  => t('Online Services'),
+        'link_path'   => 'http://oregonstate.edu/main/online-services',
+        'menu_name'   => 'osu-top-hat',
+        'weight'      => 4,
+        );
+    menu_link_save($item);
+
+    $item = array(
+        'link_title'  => t('Make a Gift'),
+        'link_path'   => 'http://osufoundation.org/giving/online_gift.shtml',
+        'menu_name'   => 'osu-top-hat',
+        'weight'      => 5,
+        'options'     => array('attributes' => array('class' => array('campaign'))),
+        );
+    menu_link_save($item);
+
+    // Update the menu router information.
+    menu_rebuild();
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ *
+ * Adds the block to the blocks admin page
+ */
+function extension_settings_block_info() {
+ $blocks = array();
+ $blocks['extension_top_hat'] = array(
+   'info' => t('Extension Top Hat'),
+	 'region' => 'top',
+ );
+ $blocks['extension_top_hat_links'] = array(
+   'info' => t('Extension Top Hat Links'),
+	 'region' => 'top',
+ );
+	$blocks['extension_footer'] = array(
+	  'info' => t('Contact Info / Social Media / Login'),
+	);
+	$blocks['extension_social_media'] = array(
+	  'info' => t('Social Media'),
+	);
+ return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * Outputs the block itself
+ */
+function extension_settings_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'extension_top_hat':
+      $block['content'] = extension_top_hat_content();
+      break;
+		case 'extension_top_hat_links':
+	    $block['content'] = extension_top_hat_links_content();
+	    break;
+		case 'extension_footer':
+	    $block['content'] = extension_footer_content();
+	    break;
+		case 'extension_social_media':
+	    $block['content'] = extension_social_media_content();
+	    break;
+  }
+  return $block;
+}
+
+/**
+ * Function to build the top hat content
+ *
+ */
+function extension_top_hat_content() {
+  global $base_url;
+
+  // Get saved settings
+  $settings = variable_get('extension_top_hat_settings', array());
+
+  // Start the top hat
+  $top_hat = "";
+
+
+  if ($settings['vso_option']) {
+    // Show VSO branding
+    $top_hat .= "<p class='vso-standard-header'>";
+    $top_hat .= "<span class='students-orange'>Students</span>";
+    $top_hat .= " @ <a href='http://oregonstate.edu/'>Oregon State University</a></p>";
+  }
+  else {
+    // Show Tag image
+    $module_path = drupal_get_path('module', 'extension_settings');
+    $tag_image = $base_url . '/' . $module_path  . '/images/osu-tag.png';
+    $top_hat .= "<a href='http://oregonstate.edu' class='tag'>" .
+        "<img src='" . $tag_image . "' class='logo' alt='Oregon State University' />" .
+        "<span class='mobile-header'>OREGON STATE UNIVERSITY</span>" .
+        "</a>";
+  }
+
+  // Utility links
+  if (! $settings['hide_utility']) {
+    $top_hat .= drupal_render(menu_tree('osu-top-hat'));
+  }
+
+  // Render the search form if it is installed and enabled
+  if( $settings['show_search'] && function_exists('osu_search_top_hat_form')) {
+    $top_hat .= render(drupal_get_form('osu_search_top_hat_form'));
+  }
+
+  // Close our divs
+  $top_hat .= "";
+
+  return $top_hat;
+}
+
+/**
+ * Function to build the top hat links content
+ *
+ */
+function extension_top_hat_links_content() {
+	$settings = variable_get('extension_top_hat_settings', array());
+	$fieldset = $settings['links']['link_fieldset'];
+	foreach($fieldset as $link_num => $link) {
+		if ($link_num == 0) $class = 'class="first"';
+		$content .= '<a '.$class.' href="'.$link['url'].'">'.$link['title'].'</a>';
+		$class = '';
+	}
+	return $content;
+}
+
+/**
+ * Function to build the footer content
+ *
+ */
+function extension_footer_content() {
+	$settings = variable_get('extension_footer_settings');
+  return theme('extension_footer_content', array('contact' => $settings['contact']));
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Defines the .tpl for formatting the block output.  Currently only used for the footer.
+ */
+function extension_settings_theme() {
+  $module_path = drupal_get_path('module', 'extension_settings');
+  $base = array(
+    'path' => "$module_path/theme",   
+  );
+  return array(
+    'extension_footer_content' => $base + array(
+      'template' => 'extension_footer', // leave off .tpl.php
+      'variables' => array('items' => NULL,),
+    ),
+  );
+}
+
+/**
+ * Function to build the social media content
+ *
+ */
+function extension_social_media_content() {
+	
+	$settings = variable_get('extension_footer_settings');
+	
+  // These values in $social_media need to match those in the settings variable
+  // for the form creation
+  $social_media = array(
+      'facebook',
+      'youtube',
+      'flickr',
+      'linkedin',
+      'twitter',
+      'google'
+      );
+
+  // Handles irregular names - like YouTube instead of Youtube for example.
+  $name_exceptions = array(
+      'linkedin'=>'LinkedIn',
+      'youtube' => 'YouTube',
+      'google'  => 'Google+',
+      );
+
+  $html = '<div class="social-media">';
+
+  foreach ($social_media as $value) {
+    //$name = substr($value, $theme_name_length);
+    if (!isset($name_exceptions[$value])) {
+      $full_name = ucfirst($value);
+    } else {
+      $full_name = $name_exceptions[$value];
+    }
+
+    // Gets the value in the database - currently users are asked to input a
+    // link to their social media page
+    $link = $settings['social_media'][$value];
+    if (!empty($link)) {
+      $html .= '<a href="' . $link . '" title="Go to our ' . $full_name
+        . ' page"><img src="http://oregonstate.edu/main/sites/default/files/'
+        . $value . '.png" alt="' . $full_name . ' logo" />' . $full_name . '</a>';
+    }
+  }
+
+	$html .= '</div>';
+	
+  return $html;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Unsets the social media form from the theme's config page so we can add it to our own
+ *
+ * @param $form
+ *   The form.
+ * @param $form_state
+ *   The form state.
+ */
+function extension_settings_form_system_theme_settings_alter(&$form, &$form_state) {
+	if (isset($form['doug_fir_social_media'])){
+		unset($form['doug_fir_social_media']);
+	}
+}

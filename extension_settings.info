@@ -1,0 +1,12 @@
+name = Extension Settings
+description = Configures site-specific options for EESC managed sites
+core = 7.x
+package = Other
+version = 7.x-1.0
+project = extension_settings
+dependencies[] = context
+dependencies[] = ctools
+stylesheets[all][] = extension_settings.css
+features[context][] = extension_settings
+features[ctools][] = context:context:3
+features[features_api][] = api:2

@@ -1,0 +1,47 @@
+<?php
+/**
+ * @file extension_settings_install
+ *
+ * Install default settings for the extension_settings
+ *
+ */
+function extension_settings_install(){
+  $top_hat_settings = array(
+      'hide_utility' => 1,
+      'show_search'  => 0,
+      'vso_option'   => 0,
+			'num_links'    => 1,
+   );
+
+	variable_set('extension_top_hat_settings', $top_hat_settings);
+
+	// note: the closing heredoc identifier cannot be indented	
+	$default_contact = <<< DEFAULT
+	Extension &amp; Experiment<br /> Station Communications<br />
+	422 Kerr Administration<br />
+	Corvallis, OR 97331<br />
+	<br />
+	(541) 737-3311
+DEFAULT;
+
+	$footer_settings = array(
+		'contact' 		 => $default_contact,
+		'social_media' => '',
+	);
+
+	 variable_set('extension_footer_settings', $footer_settings);
+}
+
+function extension_settings_uninstall() {
+  variable_del('extension_top_hat_settings');
+  variable_del('extension_footer_settings');
+}
+
+function extension_settings_block_info_alter(&$blocks, $theme, $code_blocks) {
+  // Disable the login block.  --wat?
+	$blocks['extension_settings']['extension_top_hat']['css_class'] = 'span2';
+	$blocks['extension_settings']['extension_top_hat_links']['css_class'] = 'span2';
+	$blocks['extension_settings']['extension_footer']['css_class'] = 'span2';
+	$blocks['extension_settings']['extension_social_media']['css_class'] = 'span2';
+}
+
