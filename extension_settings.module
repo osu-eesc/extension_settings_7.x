@@ -240,13 +240,14 @@ function extension_top_hat_content() {
  */
 function extension_top_hat_links_content() {
 	$settings = variable_get('extension_top_hat_settings', array());
-	$fieldset = $settings['links']['link_fieldset'];
-	foreach($fieldset as $link_num => $link) {
-		if ($link_num == 0) $class = 'class="first"';
-		$content .= '<a '.$class.' href="'.$link['url'].'">'.$link['title'].'</a>';
-		$class = '';
+	if (isset($settings['links']['link_fieldset'])) {
+		foreach($settings['links']['link_fieldset'] as $link_num => $link) {
+			if ($link_num == 0) $class = 'class="first"';
+			$content .= '<a '.$class.' href="'.$link['url'].'">'.$link['title'].'</a>';
+			$class = '';
+		}
+		return $content;
 	}
-	return $content;
 }
 
 /**

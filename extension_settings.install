@@ -17,19 +17,26 @@ function extension_settings_install(){
 
 	// note: the closing heredoc identifier cannot be indented	
 	$default_contact = <<< DEFAULT
-	Extension &amp; Experiment<br /> Station Communications<br />
-	422 Kerr Administration<br />
-	Corvallis, OR 97331<br />
-	<br />
-	(541) 737-3311
+Extension &amp; Experiment<br /> Station Communications<br />
+422 Kerr Administration<br />
+Corvallis, OR 97331<br />
+<br />
+(541) 737-3311
 DEFAULT;
 
 	$footer_settings = array(
 		'contact' 		 => $default_contact,
-		'social_media' => '',
+		'social_media' => array(
+			'facebook' => array(),
+	    'youtube' => array(),
+	    'flickr' => array(),
+	    'linkedin' => array(),
+	    'twitter' => array(),
+	    'google' => array(),
+		),
 	);
 
-	 variable_set('extension_footer_settings', $footer_settings);
+	variable_set('extension_footer_settings', $footer_settings);
 }
 
 function extension_settings_uninstall() {
@@ -44,4 +51,3 @@ function extension_settings_block_info_alter(&$blocks, $theme, $code_blocks) {
 	$blocks['extension_settings']['extension_footer']['css_class'] = 'span2';
 	$blocks['extension_settings']['extension_social_media']['css_class'] = 'span2';
 }
-
