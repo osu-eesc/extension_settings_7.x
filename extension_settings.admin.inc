@@ -188,9 +188,11 @@ function extension_settings_top_hat_settings_submit($form, &$form_state){
 	}
 	
 	// Sort the links by weight
-	usort($settings['links']['link_fieldset'], function($a, $b) {
-	    return ($a['rank'] - $b['rank']);
-	});
+	function cmp($a, $b){
+		return $a['rank']-$b['rank'];
+	}
+	usort($settings['links']['link_fieldset'], "cmp");
+	
 
   // Save the settings to a variable
   variable_set('extension_top_hat_settings', $settings);
