@@ -16,7 +16,7 @@ function extension_settings_install(){
 	variable_set('extension_top_hat_settings', $top_hat_settings);
 
 	// note: the closing heredoc identifier cannot be indented	
-	$default_contact = <<< DEFAULT
+	$default_address = <<< DEFAULT
 Extension &amp; Experiment<br /> Station Communications<br />
 422 Kerr Administration<br />
 Corvallis, OR 97331<br />
@@ -25,7 +25,10 @@ Corvallis, OR 97331<br />
 DEFAULT;
 
 	$footer_settings = array(
-		'contact' 		 => $default_contact,
+		'contact' 		 => array(
+			'address' => $default_address,
+			'webmaster' => array(),
+		),
 		'social_media' => array(
 			'facebook' => array(),
 	    'youtube' => array(),

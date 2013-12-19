@@ -219,61 +219,70 @@ function extension_settings_footer_settings() {
 
 	$form['#tree'] = TRUE;
 	
-  $form['extension_footer_settings']['contact'] = array(
-    '#type' => 'textarea',
+	$form['extension_footer_settings']['contact'] = array(
+    '#type'  => 'fieldset',
     '#title' => t('Contact Information'),
-    '#default_value' => $settings['contact'],
-    '#rows' => '8',
-    '#description' => t("HTML markup"),
-    '#required' => TRUE,
+    'address' => array(
+  		'#type' => 'textarea',
+	    '#title' => t('Address'),
+	    '#default_value' => $settings['contact']['address'],
+	    '#rows' => '8',
+	    '#description' => t("HTML markup"),
+	    '#required' => TRUE,
+    ),
+    'webmaster' => array(
+    	'#type' => 'textfield',
+	    '#title' => t('Webmaster URL'),
+	    '#default_value' => $settings['contact']['webmaster'],
+    ),
   );
 
 	$form['extension_footer_settings']['social_media'] = array(
-      '#type'  => 'fieldset',
-      '#title' => t('Social Media Links'),
-      );
-  $form['extension_footer_settings']['social_media']['facebook'] = array(
-      '#type'          => 'textfield',
+    '#type'  => 'fieldset',
+    '#title' => t('Social Media Links'),
+    'facebook' => array(
+    	'#type'          => 'textfield',
       '#title'         => t('Facebook'),
       '#default_value' => isset($settings['social_media']['facebook']) ? $settings['social_media']['facebook'] : '',
       '#size'          => 60,
       '#maxlength'     => 127,
-      );
-  $form['extension_footer_settings']['social_media']['youtube'] = array(
-      '#type'          => 'textfield',
+    ),
+    'youtube' => array(
+    	'#type'          => 'textfield',
       '#title'         => t('YouTube'),
       '#default_value' => isset($settings['social_media']['youtube']) ? $settings['social_media']['youtube'] : '',
       '#size'          => 60,
       '#maxlength'     => 127,
-      );
-  $form['extension_footer_settings']['social_media']['flickr'] = array(
-      '#type'          => 'textfield',
+    ),
+    'flickr' => array(
+    	'#type'          => 'textfield',
       '#title'         => t('Flickr'),
       '#default_value' => isset($settings['social_media']['flickr']) ? $settings['social_media']['flickr'] : '',
       '#size'          => 60,
       '#maxlength'     => 127,
-      );
-  $form['extension_footer_settings']['social_media']['linkedin'] = array(
-      '#type'          => 'textfield',
+    ),
+    'linkedin' => array(
+    	'#type'          => 'textfield',
       '#title'         => t('LinkedIn'),
       '#default_value' => isset($settings['social_media']['linkedin']) ? $settings['social_media']['linkedin'] : '',
       '#size'          => 60,
       '#maxlength'     => 127,
-      );
-  $form['extension_footer_settings']['social_media']['twitter'] = array(
-      '#type'          => 'textfield',
+    ),
+    'twitter' => array(
+    	'#type'          => 'textfield',
       '#title'         => t('Twitter'),
       '#default_value' => isset($settings['social_media']['twitter']) ? $settings['social_media']['twitter'] : '',
       '#size'          => 60,
       '#maxlength'     => 127,
-      );
-  $form['extension_footer_settings']['social_media']['google'] = array(
-      '#type'          => 'textfield',
+    ),
+    'google' => array(
+    	'#type'          => 'textfield',
       '#title'         => t('Google+'),
       '#default_value' => isset($settings['social_media']['google']) ? $settings['social_media']['google'] : '',
       '#size'          => 60,
       '#maxlength'     => 127,
-      );
+    ),
+	);
 
   $form['submit'] = array(
     '#type' => 'submit',
