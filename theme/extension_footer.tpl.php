@@ -1,11 +1,11 @@
 <?php
   global $base_url;
   if (!user_is_logged_in()) {
-    $link_text = "Log in";
+    $link_text = "Sign in";
     $link_path = "$base_url/user/login";
   }
   else {
-    $link_text = "Log out";
+    $link_text = "Sign out";
     $link_path = "$base_url/user/logout";
   }
 ?>

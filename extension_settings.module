@@ -214,7 +214,7 @@ function extension_top_hat_content() {
     $tag_image = $base_url . '/' . $module_path  . '/images/osu-tag.png';
     $top_hat .= "<a href='http://oregonstate.edu' class='tag'>" .
         "<img src='" . $tag_image . "' class='logo' alt='Oregon State University' />" .
-        "<span class='mobile-header'>OREGON STATE UNIVERSITY</span>" .
+        "<span class='mobile-header'>Oregon State University</span>" .
         "</a>";
   }
 
@@ -244,7 +244,7 @@ function extension_top_hat_links_content() {
 	if (isset($settings['links']['link_fieldset'])) {
 		foreach($settings['links']['link_fieldset'] as $link_num => $link) {
 			if ($link_num == 0) $class = 'class="first"';
-			$content .= '<a '.$class.' href="'.$link['url'].'">'.$link['title'].'</a>';
+			$content .= '<a '. $class . ' href="' . $link['url'].'">' . $link['title'] .'</a>';
 			$class = '';
 		}
 		return $content;
@@ -268,7 +268,7 @@ function extension_footer_content() {
 function extension_settings_theme() {
   $module_path = drupal_get_path('module', 'extension_settings');
   $base = array(
-    'path' => "$module_path/theme",   
+    'path' => "$module_path/theme",
   );
   return array(
     'extension_footer_content' => $base + array(
@@ -283,9 +283,9 @@ function extension_settings_theme() {
  *
  */
 function extension_social_media_content() {
-	
+
 	$settings = variable_get('extension_footer_settings');
-	
+
   // These values in $social_media need to match those in the settings variable
   // for the form creation
   $social_media = array(
@@ -325,7 +325,7 @@ function extension_social_media_content() {
   }
 
 	$html .= '</div>';
-	
+
   return $html;
 }
 
