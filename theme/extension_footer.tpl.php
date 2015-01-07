@@ -1,13 +1,32 @@
 <?php
   global $base_url;
-  if (!user_is_logged_in()) {
-    $link_text = "Sign in";
-    $link_path = "$base_url/user/login";
+
+  // change login text if on the catalog site
+  if (strpos($base_url,'catalog') !== FALSE) {
+
+    if (!user_is_logged_in()) {
+      $link_text = 'Sign in';
+      $link_path = $base_url . '/user/login';
+    }
+    else {
+      $link_text = 'Sign out';
+      $link_path = $base_url . '/user/logout';
+    }
+
   }
   else {
-    $link_text = "Sign out";
-    $link_path = "$base_url/user/logout";
+
+    if (!user_is_logged_in()) {
+      $link_text = 'Log in';
+      $link_path = $base_url . '/user/login';
+    }
+    else {
+      $link_text = 'Log out';
+      $link_path = $base_url . '/user/logout';
+    }
+
   }
+
 ?>
     <h3>Contact Info</h3>
     <p><?php print $contact['address']; ?></p>
